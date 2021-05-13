@@ -1,0 +1,79 @@
+server:
+  port: 53020
+  tomcat:
+    remote_ip_header: x-forwarded-for
+    protocol_header: x-forwarded-proto
+  use-forward-headers: true
+  servlet:
+    context-path: /uaa
+
+
+spring:
+  application:
+    name: uaa-service
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource   #配置数据源的类型
+    driver-class-name: com.mysql.jdbc.Driver
+    #driver-class-name: org.git.mm.mysql.Driver
+    url: jdbc:mysql://192.168.103.015:3306/test_cloud?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: 123456
+  main:
+    allow-bean-definition-overriding: true
+  http:
+    encoding:
+      enabled: true
+      charset: UTF-8
+      force: true
+  freemarker:
+    enable: true
+    suffix: .html
+    request-context-attribute: rc
+    content-type: text/html
+    charset: UTF-8
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh,health,info,env
+
+
+feign:
+  hystrix:
+    enable: true
+  compression:
+    request:
+      enable: true
+      mime-types[0]: text/xml
+      mime-types[1]: application/xml
+      mime-types[2]: application/json
+      min-request-size: 2048
+    response:
+      enable: true
+
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://eureka7002.com:7002/eureka/,http://eureka7001.com:7001/eureka/
+  instance:
+    instance-id: uaa53020
+    prefer-ip-address: true   #网页eureka访问路径，可现实Ip地址
+
+mybatis:
+  mapperLocations: classpath:/mapper/*Mapper.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  type-aliases-package: com.zn.springCloud.entities
+
+
+
+

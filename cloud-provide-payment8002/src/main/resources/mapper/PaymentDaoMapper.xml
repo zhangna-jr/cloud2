@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zn.springCloud.mapper.PaymentDaoMapper">
+
+    <insert id="create" parameterType="com.zn.springCloud.entities.Payment" >
+        insert into test_cloud.payment(serial)
+        values
+        (#{payment.serial});
+
+    </insert>
+
+    <resultMap id="BASE_DATE" type="com.zn.springCloud.entities.Payment">
+        <id column="id" property="id" jdbcType="BIGINT"></id>
+        <id column="serial" property="serial" jdbcType="VARCHAR"></id>
+    </resultMap>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BASE_DATE">
+            select * from test_cloud.payment  where id=#{id}
+    </select>
+</mapper>

@@ -1,0 +1,165 @@
+server:
+  port: 8001
+
+
+spring:
+  application:
+    name: cloud-payment-service
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource   #配置数据源的类型
+    driver-class-name: com.mysql.jdbc.Driver
+    #driver-class-name: org.git.mm.mysql.Driver
+    url: jdbc:mysql://192.168.103.015:3306/test_cloud?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: 123456
+
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true    #从eureka拉取服务列表
+    serviceUrl:
+      defaultZone: http://eureka7002.com:7002/eureka/,http://eureka7001.com:7001/eureka/
+      #defaultZone: http://eureka7001.com:7001/eureka/
+  instance:
+    instance-id: payment8001
+    prefer-ip-address: true   #网页eureka访问路径，可现实Ip地址
+    #lease-renewal-interval-in-seconds: 1   #eureka客户端向服务端发送心跳的时间间隔，单位为秒（默认30）
+    #lease-expiration-duration-in-seconds: 2  #eureka服务端收到最后一次心跳后等待时间上限，单位为秒（默认为90），超时将剔除服务
+mybatis:
+  mapperLocations: classpath:/mapper/*Mapper.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  type-aliases-package: com.zn.springCloud.entities
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#测试gateway-client时引入的依赖
+feign:
+  url:
+    #每个ApiClient文件里， FeignClient的url地址
+    xxxxController: http:127.0.0.1:8888
+
+
+request:
+  #渠道号
+  chnlcode: odpsit
+  #加密方式
+  encryptalgo: RSA
+  encodekey: SHA1WithRSA
+  #机构号
+  txbrno: BOP-202007065800
+  #每个接口的  serviceCode
+  servicecode:
+    z0101: A0119
+    bcdlAccnoQueryUsingPOST:  A0185   #账户信息查询申请
+    bcdlAccAmtQueryUsingPOST:  A0186   #账户余额查询
+    bcdlBatchTransferUsingPOST:  A0192  #转账汇款批量处理
+    bcdlConfirmPayUsingPOST:  A0190   #签约账户互转
+    bcdlConfirmQryUsingPOST:  A0188   #签约信息查询
+
+    bcdlRoleChangeUsingPOST:  A0120    #功能权限变更
+    bcdlBankConfirmQryUsingPOST:  A0120    #签约企业信息查询
+
+
+    bcdlTradeQueryUsingPOST:  A0187   #交易明细查询
+    bcdlTradeStsQryUsingPOST:  A0189   #交易状态查询
+    bcdlTransferUsingPOST:  A0191   #转账汇款
+
+  #每个接口的svcSubCode
+  svcsubcode:
+    z0101:
+    bcdlAccnoQueryUsingPOST:  A0121
+    bcdlAccAmtQueryUsingPOST:  A0121
+    bcdlBatchTransferUsingPOST:  A0121
+    bcdlConfirmPayUsingPOST:  A0121
+    bcdlConfirmQryUsingPOST:  A0121
+    bcdlRoleChangeUsingPOST:  A0121
+    bcdlTradeQueryUsingPOST:  A0121
+    bcdlTradeStsQryUsingPOST:  A0121
+    bcdlTransferUsingPOST:  A0121
+    bcdlBankConfirmQryUsingPOST:  A0121
+  #每个接口是否加解密  true or false
+  encode:
+    z0101: false
+    bcdlAccnoQueryUsingPOST:  false
+    bcdlAccAmtQueryUsingPOST:  false
+    bcdlBatchTransferUsingPOST:  false
+    bcdlConfirmPayUsingPOST:  true
+    bcdlConfirmQryUsingPOST:  true
+    bcdlRoleChangeUsingPOST:  false
+    bcdlTradeQueryUsingPOST:  false
+    bcdlTradeStsQryUsingPOST:  false
+    bcdlTransferUsingPOST:  false
+    bcdlBankConfirmQryUsingPOST:  false
+  #每个接口是否加签验签  true or false
+  sign:
+    z0101: false
+    bcdlAccnoQueryUsingPOST:  false
+    bcdlAccAmtQueryUsingPOST:  false
+    bcdlBatchTransferUsingPOST:  false
+    bcdlConfirmPayUsingPOST:  false
+    bcdlConfirmQryUsingPOST:  true
+    bcdlRoleChangeUsingPOST:  false
+    bcdlTradeQueryUsingPOST:  false
+    bcdlTradeStsQryUsingPOST:  false
+    bcdlTransferUsingPOST:  false
+    bcdlBankConfirmQryUsingPOST:  false
+  url:
+    bcdlAccAmtQueryUsingPOST:  /sandbox/YQ01/YQ01/YQ1002/V1.0.0  #账户余额查询
+    bcdlAccnoQueryUsingPOST:  /sandbox/YQ01/YQ01/YQ1001/V1.0.0  #账户信息查询
+    bcdlBatchTransferUsingPOST:  /sandbox/YQ01/YQ01/YQ1008/V1.0.0  #转账汇款批量处理
+    bcdlConfirmPayUsingPOST:  /sandbox/YQ01/YQ01/YQ1006/V1.0.0  #签约账户互转
+    bcdlConfirmQryUsingPOST:  /sandbox/YQ01/YQ01/YQ1004/V1.0.0  #签约信息查询
+    bcdlTradeQueryUsingPOST:  /sandbox/YQ01/YQ01/YQ1003/V1.0.0  #交易明细查询
+    bcdlTradeStsQryUsingPOST:  /sandbox/YQ01/YQ01/YQ1005/V1.0.0  #交易流水查询
+    bcdlTransferUsingPOST:  /sandbox/YQ01/YQ01/YQ1007/V1.0.0  #单笔转账汇款
+
+
+
+
+token:
+  clientsecret: 9fe6103b38314e8ea62fe2b45a231b6e
+  tokenUrl: http://127.0.0.1:9004/auth/oauth/token
+
+##签名加密公私钥信息
+sign:
+  #平台签名公钥
+  pubkey: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCFAlonD7allqHitO90cCQ0zEnpSt9XDOfVJLDSiZ/wTkZnG07LveL+Vmkm9KB+pjEy8kzd8M8hmVfk9c6Vnu7PH0kvdfVY+9e7U/E1O6UG3b/J61Hv2ojtjv5RyJUkLfrFCEwCJlf0fyDLO+/EhToKFcxnuzkwaOfM205TPpKLdwIDAQAB
+  #用户验签私钥
+  prikey: MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDDVtVgjHrUzoCZPuYS/2ix8o9lpcOE7yLXZoOefuSiaV7Hhps+8sbvLcOTLvpDQ5megyxzpRtWz0IM/bDeA07fxQBJ5SIyzA0/52KFVvkzYIkTAIWpty2C3ec6SmmnXqelZWKicFen8ORsjwFQttXiiddEJhxrbQNQ87iwkuXlSR27bHu3y3VoH4WvQeJyMRDMZk1Q0VTYNKrzJd5E13Z7eUzeu8rpRHK4xoM3tIy071NPrTd5AxwffG+EWEeG13Q7MX53YJI8Dj1U49+2Oh013AC6cQzvEYjvKBN1A+JkbZ6Svlv301fUQA0p8tlxEv6UdlKz6Xm0FPD0ocqizbpTAgMBAAECggEBAIBfB1ks2OgTUYXkRRUFDourCTvWxPgOo8oEz8iQQbbOIoBjYJDswXmbjKSkQcmEmmcGc2cIgT/6csDQ07QDXolGENt/Hotdd/OgHynbr2dpMIvxUuXmwJz5MaUoE+jvFqNmTnzL8X8nmyYQkN+3WDZJOdPKa/DZMk237Y706upTi6MbsaVKkZ396gP/9q8D0zZJjEmAVQjy7YUL+BZafo2Cnb3LJI+FwTUTovX21shsFa10/BnnPr6AlVYU8xAP8ZaRNISJ6ub6ZoyMVBWUg5gnaJ8XGV5oSob7cPOLEzwfvz7ldiPzAfM6SoAF7Z+d2NQNAZZvxpPhre1ekT4LqNECgYEA+6PtE2Opdbrit/IrFNHiIXQR50oPR82/wY+StGSv+04SjclBPDZO9IcsfjAgz6+AUek5pOgymhkzWCow61BW9m5hok65a3iuvBeU2xuYhJ+/gpqNB/K4KXMCAmiNtKo9XZ0g0M8tIEmeFaV0uMYkWF1TAW20PXf2YQH7CgGEjpsCgYEAxrkzbW9A956L/rAEuT6ZQbo+7PKlXLxUYjMtIobnAHJWmeVnni3ZJ18Y+ew34c6JPEurhoqvKJNW5mTSSh6T1ckJ7QqISCgrNPL9/4jNQNmFiRaUBGHkQn0eJMnjpMuauDcMU6PNFcXGB8pLv7BcuP+2K73T6jdf5LVTH5ZBIqkCgYAvoY69bc7ktvQ1J0SaU0P/Ww4Mfos35y0VwUxekvRwmA2RAvgzIoB9bpywYgHD7g9W8dN0cHMrkfuTA6Fw2SssyCX45/fW7Of+OGR3uNh8uhQw73okd//98IP/2rR/7v1gm95bR+vdwbGHnWLjmrXEeB2/FnnYbL2ZDRvsf+8MYwKBgQCpbdWPBD/b3u11JBWi6uA3zddAplCelGNNplxhB6uEEfgMFi8WCfkPPGFLFD9A4prXMZz4hN16NsTsgiFY2GEq8NDprQUsoDLWXiZ46+Yz2EGl8/4XDm9S0OIWc5sHMiCj1ytHVGzSl2CT28JhmLg1cq+a86nuE3BKyt4oHC9EoQKBgGruAGryvR0hBNet+c7hN25kXjc+/7S4mOCKY41JMKNz9KcvDsICyi082317iI8CSoYLbFVZrj824GTSk6WU8uwvNbEs1XA3zUuTCCvZ05SbBPXeHNJ0fDfUQLNX8SWhel0rAlL8u2hXRYVGRTzOrym6TmanR0eiiomHEw7fE5B4
+  #平台加密公钥
+  encryptpubkey: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCYGaJjgTghJgWw5QOj6+u2Avt56rf/vz7va2S+GLoOOaG2sSjYq3LyMgmm6wsh4E/+UYU1Ak+Jlu5CWIk6k1OHktm8A72GCrCkQu1KckNo1tEf6bilv8PSxWQBzE1FwFmQa2x7e3uTvG45ujc0ZTKdwT1Jy2buBANLAU5GN2zwXQIDAQAB
+  #用户解密私钥
+  encryptprikey: MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQComlxsq5EhtfaKys2JJ4+L8CrVtiDwgf82kiGKxfCdnk2nDRV+ikjQ0YYtmgE9FlF+9z4Uibaeblcd5QyxiBExiN4jat2VGXWzkaRvlF+ouHbSNbe/zo+dgQAAbiCL93xDVsQSCrpBA+oNYIJ6AKs7n1hgTob3GOBfxmIHDQxx59nOYzVPq0WFtjnG9vxuqKvLn9dv7nvKfLOkoINr4IdYrUVOElIhfZ3Pk1ZKOq1By1+8KahtU8ZYBUtUPRMG4+wRrihheVUREyUpjmqhKl+lo+haWTRG5HGWMLwI8c8MSRvvThzlQQ57r/GPOIsXZlOUmuwcpV51l1b2FvXo+5upAgMBAAECggEAPcjTNb9pX8Eep53J1Aj7QXyxNb+YMopwy76hLAl9M0Vfj2fsCIMETAF7+hoFei1DkBNqXHxav5QPuJTHIgeKxWwyeygeKxU5XKRybbEhnOJ8KGwm+dLoLf+n0ICKzL/UeZjCIRptRoX4rw4+whacqSyrZh9gtgwXrQE1yv+tH9AMz7OZIJebK4neCXBazpF7gft+PEUbCvCWyCJST+qOXkgkm5cUjjbIFOHSAlsYyIAZPfVBzmkLjLVDrKY2jnYLHoqPB5evEAJWrPmry5/hGLf0cIVLdYLyQAAIKCmLoMetBJMtjk668Ng87J/bkW0fp2M9kMdHXpCEg5IcryPYAQKBgQDwSDOAGaXj9WpKox8+GYbj27AIHOaO+d/wy0Duh/dSOlQBaZyZ3n2VQfnlc4OZgDWMiuLE4cEcqH186G20PguHnydi5ztXjbKs/kNoC1Xpgh3I5royKpfylodol93aDvtr3zenO0Qa8armS1QYDsHBEou6YuhHoqnLWI6jBd+/UQKBgQCzoc/DUn7cKGBMZbF+jqXaJkS+L7DddvKzk7DS8pylwoWUAzSRJg5K8cdqp4C4+9HXTnUceIaeMoGpj7D6R26MIyim7PPmPGlv/Wkav1IF/mrdW3gqPvAk6lFnesgFQKL82gU2CCxENxjaGBg1yqO1QLTrPow5Ykdk2zO6Du9w2QKBgQCmosvkiOT9JJOkU2A1ZuqfVxnLZo+WlD/z9GGBixXAFudvW1jZdO1O98Rgli2r5Lg+UYtW0uFkCI2OdHqwR18jnQJpmscSvxgs1ODWZRYdrLkPPMPgSp26BR6/MKMQuNcwRkuIVJe0v+ivcYpObN1+EmiIyFMiavKqLS4ubMJxIQKBgQCsyQWuzKhoHpJaiisMICxaRRs0kW0f6a2UnIimsGWLcCvK7rZes+tlnWGDLrG7vcXfw4EUrL5YZx6fui6y34jvVVZiEmSc3xlQdsHlz4gXadzjJXvVrwqRh65byheiLcVZUGFY0s25pAHMrwaCn3OPAjnEWjrJa8ZethbwbjNVKQKBgQCenNq0FWMAArGBrBdk8o+t0Ynory93kl9dY5fQIJ3zaSEvJRLdjvDQUDfii09tMli+q13dyHoJgd/o7x+hEK0yKm8go6wrQv5dWGuBLTyz3UpyLgWYNDtOU5YBHEkcjCfuAhqQgWXD99OfZclABQOGgntZK49am71STdV9P80VGg==
+
+
+
+bcdlConfirmController:
+  url:  http://192.168.103.15:8803
+
+
+

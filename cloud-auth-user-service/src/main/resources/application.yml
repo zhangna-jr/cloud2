@@ -1,0 +1,46 @@
+server:
+  port: 9090
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka7002.com:7002/eureka/,http://eureka7001.com:7001/eureka/
+spring:
+  application:
+    name: cloud-auth-user-service
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource   #配置数据源的类型
+    driver-class-name: com.mysql.jdbc.Driver
+    #driver-class-name: org.git.mm.mysql.Driver
+    url: jdbc:mysql://192.168.103.015:3306/test_cloud?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: 123456
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+feign:
+  hystrix:
+    enabled: true
+
+mybatis:
+  mapperLocations: classpath:/mapper/*Mapper.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  type-aliases-package: com.zn.cloud.entity
+
+
+ribbon:
+  eureka:
+    enabled: true
+    #指的是建立连接所用的时间，适用于网络状况正常的情况下，两端连接所用的时间
+  ReadTimeout: 6000
+    #指的是建立连接后从服务器读取到可用资源所用的时间
+  ConnectTimeout: 6000
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+

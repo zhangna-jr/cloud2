@@ -1,3 +1,4 @@
+/*
 package com.zn.springCloud.util;
 
 import cn.hutool.crypto.asymmetric.KeyType;
@@ -55,22 +56,26 @@ public class GmUtil {
         }
     }
 
-    /**
+    */
+/**
      * @param msg
      * @param userId
      * @param privateKey
      * @return r||s，直接拼接byte数组的rs
-     */
+     *//*
+
     public static byte[] signSm3WithSm2(byte[] msg, byte[] userId, PrivateKey privateKey) {
         return rsAsn1ToPlainByteArray(signSm3WithSm2Asn1Rs(msg, userId, privateKey));
     }
 
-    /**
+    */
+/**
      * @param msg
      * @param userId
      * @param privateKey
      * @return rs in <b>asn1 format</b>
-     */
+     *//*
+
     public static byte[] signSm3WithSm2Asn1Rs(byte[] msg, byte[] userId, PrivateKey privateKey) {
         try {
             SM2ParameterSpec parameterSpec = new SM2ParameterSpec(userId);
@@ -85,24 +90,28 @@ public class GmUtil {
         }
     }
 
-    /**
+    */
+/**
      * @param msg
      * @param userId
      * @param rs        r||s，直接拼接byte数组的rs
      * @param publicKey
      * @return
-     */
+     *//*
+
     public static boolean verifySm3WithSm2(byte[] msg, byte[] userId, byte[] rs, PublicKey publicKey) {
         return verifySm3WithSm2Asn1Rs(msg, userId, rsPlainByteArrayToAsn1(rs), publicKey);
     }
 
-    /**
+    */
+/**
      * @param msg
      * @param userId
      * @param rs        in <b>asn1 format</b>
      * @param publicKey
      * @return
-     */
+     *//*
+
     public static boolean verifySm3WithSm2Asn1Rs(byte[] msg, byte[] userId, byte[] rs, PublicKey publicKey) {
         try {
             SM2ParameterSpec parameterSpec = new SM2ParameterSpec(userId);
@@ -116,12 +125,14 @@ public class GmUtil {
         }
     }
 
-    /**
+    */
+/**
      * bc加解密使用旧标c1||c2||c3，此方法在加密后调用，将结果转化为c1||c3||c2
      *
      * @param c1c2c3
      * @return
-     */
+     *//*
+
     private static byte[] changeC1C2C3ToC1C3C2(byte[] c1c2c3) {
         final int c1Len = (x9ECParameters.getCurve().getFieldSize() + 7) / 8 * 2 + 1; //sm2p256v1的这个固定65。可看GMNamedCurves、ECCurve代码。
         final int c3Len = 32; //new SM3Digest().getDigestSize();
@@ -133,12 +144,14 @@ public class GmUtil {
     }
 
 
-    /**
+    */
+/**
      * bc加解密使用旧标c1||c3||c2，此方法在解密前调用，将密文转化为c1||c2||c3再去解密
      *
      * @param c1c3c2
      * @return
-     */
+     *//*
+
     private static byte[] changeC1C3C2ToC1C2C3(byte[] c1c3c2) {
         final int c1Len = (x9ECParameters.getCurve().getFieldSize() + 7) / 8 * 2 + 1; //sm2p256v1的这个固定65。可看GMNamedCurves、ECCurve代码。
         final int c3Len = 32; //new SM3Digest().getDigestSize();
@@ -149,36 +162,42 @@ public class GmUtil {
         return result;
     }
 
-    /**
+    */
+/**
      * c1||c3||c2
      *
      * @param data
      * @param key
      * @return
-     */
+     *//*
+
     public static byte[] sm2Decrypt(byte[] data, PrivateKey key) {
         return sm2DecryptOld(changeC1C3C2ToC1C2C3(data), key);
     }
 
-    /**
+    */
+/**
      * c1||c3||c2
      *
      * @param data
      * @param key
      * @return
-     */
+     *//*
+
 
     public static byte[] sm2Encrypt(byte[] data, PublicKey key) {
         return changeC1C2C3ToC1C3C2(sm2EncryptOld(data, key));
     }
 
-    /**
+    */
+/**
      * c1||c2||c3
      *
      * @param data
      * @param key
      * @return
-     */
+     *//*
+
     public static byte[] sm2EncryptOld(byte[] data, PublicKey key) {
         BCECPublicKey localECPublicKey = (BCECPublicKey) key;
         ECPublicKeyParameters ecPublicKeyParameters = new ECPublicKeyParameters(localECPublicKey.getQ(), ecDomainParameters);
@@ -191,13 +210,15 @@ public class GmUtil {
         }
     }
 
-    /**
+    */
+/**
      * c1||c2||c3
      *
      * @param data
      * @param key
      * @return
-     */
+     *//*
+
     public static byte[] sm2DecryptOld(byte[] data, PrivateKey key) {
         BCECPrivateKey localECPrivateKey = (BCECPrivateKey) key;
         ECPrivateKeyParameters ecPrivateKeyParameters = new ECPrivateKeyParameters(localECPrivateKey.getD(), ecDomainParameters);
@@ -240,10 +261,12 @@ public class GmUtil {
 
     }
 
-    /**
+    */
+/**
      * @param bytes
      * @return
-     */
+     *//*
+
     public static byte[] sm3(byte[] bytes) {
         SM3Digest sm3 = new SM3Digest();
         sm3.update(bytes, 0, bytes.length);
@@ -270,12 +293,14 @@ public class GmUtil {
         }
     }
 
-    /**
+    */
+/**
      * BC的SM3withSM2签名得到的结果的rs是asn1格式的，这个方法转化成直接拼接r||s
      *
      * @param rsDer rs in asn1 format
      * @return sign result in plain byte array
-     */
+     *//*
+
     private static byte[] rsAsn1ToPlainByteArray(byte[] rsDer) {
         ASN1Sequence seq = ASN1Sequence.getInstance(rsDer);
         byte[] r = bigIntToFixexLengthBytes(ASN1Integer.getInstance(seq.getObjectAt(0)).getValue());
@@ -286,12 +311,14 @@ public class GmUtil {
         return result;
     }
 
-    /**
+    */
+/**
      * BC的SM3withSM2验签需要的rs是asn1格式的，这个方法将直接拼接r||s的字节数组转化成asn1格式
      *
      * @param sign in plain byte array
      * @return rs result in asn1 format
-     */
+     *//*
+
     private static byte[] rsPlainByteArrayToAsn1(byte[] sign) {
         if (sign.length != RS_LEN * 2) throw new RuntimeException("err rs. ");
         BigInteger r = new BigInteger(1, Arrays.copyOfRange(sign, 0, RS_LEN));
@@ -351,7 +378,8 @@ public class GmUtil {
 
 
         // 生成公私钥对 ---------------------
-        /*KeyPair kp = generateKeyPair();
+        */
+/*KeyPair kp = generateKeyPair();
 
         System.out.println(Hex.toHexString(kp.getPrivate().getEncoded()));
         System.out.println(Hex.toHexString(kp.getPublic().getEncoded()));
@@ -392,7 +420,8 @@ public class GmUtil {
         //PublicKey publicKey = getPublickeyFromX509File(new File("/Users/xxx/Downloads/xxxxx.cer"));
         //System.out.println(publicKey);
         PublicKey publicKey1 = getPublickeyFromXY(new BigInteger("59cf9940ea0809a97b1cbffbb3e9d96d0fe842c1335418280bfc51dd4e08a5d4", 16), new BigInteger("9a7f77c578644050e09a9adc4245d1e6eba97554bc8ffd4fe15a78f37f891ff8", 16));
-        System.out.println(publicKey1);*/
+        System.out.println(publicKey1);*//*
+
         //System.out.println(publicKey.equals(publicKey1));
         //System.out.println(publicKey.getEncoded().equals(publicKey1.getEncoded()));
 //
@@ -413,7 +442,8 @@ public class GmUtil {
         bs1 = sm2Decrypt(bs1, bcecPrivateKey);
         System.out.println(new String(bs1));
 
-        /*SM2 sm2 = new SM2();
+        */
+/*SM2 sm2 = new SM2();
         PrivateKey privateKey = sm2.getPrivateKey();
         PublicKey publicKey = sm2.getPublicKey();
         System.out.println("private key d: " + ((BCECPrivateKey) privateKey).getD());
@@ -421,7 +451,8 @@ public class GmUtil {
         byte[] bs2 = sm2.encrypt("小明".getBytes(), KeyType.PublicKey);
         System.out.println(Hex.toHexString(bs2));
         bs2 = sm2.decrypt(bs2,KeyType.PrivateKey);
-        System.out.println(new String(bs2));*/
+        System.out.println(new String(bs2));*//*
+
 
 //        // sm4 encrypt and decrypt test ---------------------
 //        //0123456789abcdeffedcba9876543210 + 0123456789abcdeffedcba9876543210 -> 681edf34d206965e86b3e94f536e4246
@@ -435,3 +466,4 @@ public class GmUtil {
     }
 
 }
+*/

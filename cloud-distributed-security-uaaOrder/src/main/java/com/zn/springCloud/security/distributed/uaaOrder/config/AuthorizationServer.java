@@ -21,14 +21,14 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory()           //使用内存存储客户端信息
+        /*clients.inMemory()           //使用内存存储客户端信息
                 .withClient("")   //client_id，用来标识客户的ID
                 .secret()         //客户端安全码，密钥
                 .resourceIds("")
                 .authorizedGrantTypes()   //该client允许的授权类型，默认为空
                 .scopes("all")  //用来限制客户端的访问范围，如果为空（默认）的话，那么客户端拥有全部访问权限
                 .autoApprove(false)
-                .redirectUris()   //验证回调地址
+                .redirectUris()   //验证回调地址*/
 
     }
 }

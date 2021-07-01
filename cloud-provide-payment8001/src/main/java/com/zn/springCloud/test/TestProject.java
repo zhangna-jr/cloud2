@@ -4,14 +4,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zn.springCloud.entities.SdkEntity.Student;
 import com.zn.springCloud.entities.SdkEntity.User;
-import test.SignAddTest;
+//import test.SignAddTest;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TestProject {
     public static void main(String[] args) {
-        SignAddTest.test();
+        //SignAddTest.test();
         /*User user = new User();
         List<Student> students = new ArrayList<>();
         user.setName("一班");

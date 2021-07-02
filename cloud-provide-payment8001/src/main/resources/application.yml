@@ -16,8 +16,8 @@ spring:
 
 eureka:
   client:
-    registerWithEureka: true
-    fetchRegistry: true    #从eureka拉取服务列表
+    registerWithEureka: false
+    fetchRegistry: false    #从eureka拉取服务列表
     serviceUrl:
       defaultZone: http://eureka7002.com:7002/eureka/,http://eureka7001.com:7001/eureka/
       #defaultZone: http://eureka7001.com:7001/eureka/

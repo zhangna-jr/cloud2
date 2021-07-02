@@ -1,4 +1,4 @@
-package com.zn.springCloud.entities.SdkEntity;
+package com.zn.springCloud.entities;
 
 
 public class Student {

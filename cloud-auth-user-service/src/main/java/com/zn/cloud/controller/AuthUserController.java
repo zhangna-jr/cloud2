@@ -1,19 +1,16 @@
 package com.zn.cloud.controller;
 
 
-import com.zn.cloud.dao.UserLoginDTO;
-import com.zn.cloud.entity.User;
+import com.zn.cloud.entity.TUser;
 import com.zn.cloud.service.AuthUserService;
 import com.zn.springCloud.entities.CommentResule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -27,8 +24,8 @@ public class AuthUserController {
     private AuthUserService authUserService;
 
     @RequestMapping(value = "/register")
-    public CommentResule register(@RequestBody User user){
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+    public CommentResule register(@RequestBody TUser user){
+        user.setUserPassword(new BCryptPasswordEncoder().encode(user.getUserPassword()));
         CommentResule value = authUserService.register(user);
         return value;
     }
@@ -48,12 +45,12 @@ public class AuthUserController {
 
     }
 
-    @RequestMapping(value = "/login")
+   /* @RequestMapping(value = "/login")
     public UserLoginDTO login(@RequestParam("username") String username,
                               @RequestParam("password") String password){
         UserLoginDTO userLoginDTO = authUserService.login(username,password);
         return userLoginDTO;
-    }
+    }*/
 
     @RequestMapping(value = "/foo", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('张三')")

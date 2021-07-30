@@ -1,10 +1,12 @@
 package com.zn.cloud.mapper;
 
-import com.zn.cloud.entity.User;
+
+import com.zn.cloud.entity.TUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 @Mapper
-public interface UserMapper {
-    int create(@Param("user")User user);
+public interface TUserMapper {
+
+    TUser searchUser(@Param("username")String username);
 }

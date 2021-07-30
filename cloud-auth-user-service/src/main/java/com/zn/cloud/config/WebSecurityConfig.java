@@ -33,7 +33,7 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()   //关闭CSRF
                 .authorizeRequests()
-                //.antMatchers("/user/foo").hasAuthority("张三")    //第一种授权方式****
+                .antMatchers("/user/foo").hasAuthority("p1")    //第一种授权方式****,当请求/user/foo时，必须有p1的权限
                 .antMatchers("/user/register","/user/login").permitAll()    //不拦截"/user/register","/user/login"
                 .antMatchers("/**").authenticated()   //其余全部拦截验证
                 .and()

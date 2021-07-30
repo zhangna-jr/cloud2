@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zn.cloud.mapper.TPermissionMapper">
+
+
+    <resultMap id="BASE_DATE" type="com.zn.cloud.entity.TPermission">
+        <id column="id" property="id" jdbcType="VARCHAR"></id>
+        <id column="code" property="code" jdbcType="VARCHAR"></id>
+        <id column="description" property="description" jdbcType="VARCHAR"></id>
+        <id column="fullname" property="fullname" jdbcType="VARCHAR"></id>
+        <id column="url" property="url" jdbcType="VARCHAR"></id>
+
+
+    </resultMap>
+
+    <select id="searchPermissions" parameterType="java.lang.String" resultMap="BASE_DATE">
+        select * from t_permission tp where id in (
+        select permission_id from t_role_permission trp where role_id in (
+        select role_id from t_user_role tur where user_id  = #{userId})
+        )
+    </select>
+</mapper>

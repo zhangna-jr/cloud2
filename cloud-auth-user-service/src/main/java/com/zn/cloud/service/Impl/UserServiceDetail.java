@@ -1,13 +1,18 @@
 package com.zn.cloud.service.Impl;
 
 
-import com.zn.cloud.config.UserRepository;
-import com.zn.cloud.entity.User;
+import com.zn.cloud.entity.TPermission;
+import com.zn.cloud.entity.TUser;
+import com.zn.cloud.mapper.TPermissionMapper;
+import com.zn.cloud.mapper.TUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Copyright: Copyright (c) 2020 东华软件股份公司
@@ -22,14 +27,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceDetail implements UserDetailsService {
 
+
     @Autowired
-    private UserRepository userRepository;
+    private TPermissionMapper tPermissionMapper;
+
+    @Autowired
+    private TUserMapper tUserMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User byUsername = userRepository.findByUsername(username);
-        UserDetails userDetails = org.springframework.security.core.userdetails.User.withUsername(byUsername.getUsername())
-                .password(byUsername.getPassword()).authorities(byUsername.getAuthorities()).build();
+        TUser tUser = tUserMapper.searchUser(username);
+        List<TPermission> tPermissions = tPermissionMapper.searchPermissions(tUser.getId());
+        List<String> codes = new ArrayList<>();
+        for (int i = 0;i<tPermissions.size();i++) {
+            codes.add(tPermissions.get(i).getCode());
+        }
+        String[] objects = (String[]) codes.toArray();
+        //User byUsername = userRepository.findByUsername(username);
+        UserDetails userDetails = org.springframework.security.core.userdetails.User.withUsername(tUser.getUserName())
+                .password(tUser.getUserPassword()).authorities(objects).build();
         //return byUsername;
         return userDetails;
     }

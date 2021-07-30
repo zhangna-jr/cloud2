@@ -26,7 +26,8 @@
     <module>cloud-config-client-3355</module>
     <module>cloud-auth-user-service</module> <!--Spring Security测试项目-->
     <module>cloud-distributed-security-uaa</module>  <!--cloud中资源服务工程-->
-      <module>cloud-distributed-security-uaaOrder</module>   <!--cloud中授权服务工程-->
+      <module>cloud-distributed-security-uaaOrder</module>
+    <module>cloud-test-api</module><!--cloud中授权服务工程-->
   </modules>
 
 

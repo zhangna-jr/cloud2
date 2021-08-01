@@ -1,0 +1,110 @@
+CREATE TABLE t_user(
+  id VARCHAR(32) NOT null,
+  user_name VARCHAR(255) NOT null,
+  user_password  VARCHAR(255) NOT NULL,
+  fullname VARCHAR(255) default NULL,
+  mobile VARCHAR(11) default NULL,
+  PRIMARY KEY (id)
+) ENGINE  = InnoDB DEFAULT CHARSET = utf8
+insert into t_user values('1','zhangsan','$2a$10$5Li94.PFuAxWoxb37p2vpO4yG8fOBFp4uBTyi/lVKsnWpPy0iDbyG','张三','15029012831'),
+						('2','zhangna','$2a$10$KZH9/.MdCeFqZqX3DJ0rjuH4PMiXZRGMqe2gUM72ehB3JfdezNh42','张娜','15029012832');
+					
+					
+
+
+
+CREATE TABLE t_role(
+  id VARCHAR(32) NOT null,
+  role_name VARCHAR(255) default null,
+  description  VARCHAR(255) default NULL,
+  create_time VARCHAR(8) default NULL,
+  update_time VARCHAR(8) default NULL,
+  status CHAR(1) default NULL,
+  PRIMARY KEY (id),
+ UNIQUE KEY unique_role_name(role_name)
+) ENGINE  = InnoDB DEFAULT CHARSET = utf8
+
+insert into t_role values('1','管理员',null,null,null,'');
+
+CREATE TABLE t_user_role(
+  user_id VARCHAR(32) NOT null,
+  role_id VARCHAR(32) NOT null,
+  create_time VARCHAR(8) default NULL,
+  createror VARCHAR(255) default NULL,
+  PRIMARY KEY (user_id,role_id)
+) ENGINE  = InnoDB DEFAULT CHARSET = utf8
+
+insert into t_user_role values('1','1',null,null);
+
+
+CREATE TABLE t_permission(
+  id VARCHAR(32) NOT null,
+  code VARCHAR(32) NOT null COMMENT '权限标识符',
+  description VARCHAR(64) default null COMMENT '描述',
+  url VARCHAR(128) default null COMMENT '请求地址',
+  PRIMARY KEY (id)
+) ENGINE  = InnoDB DEFAULT CHARSET = utf8
+
+insert into t_permission values('1','p1','测试资源1','r/r1'),('2','p2','测试资源2','r/r2');
+
+CREATE TABLE t_role_permission(
+  role_id VARCHAR(32) NOT null,
+  permission_id VARCHAR(32) NOT null
+) ENGINE  = InnoDB DEFAULT CHARSET = utf8
+
+insert into t_role_permission values('1','1'),('1','2');
+
+CREATE TABLE `appone` (
+  `Id` bigint(200) NOT NULL,
+  `AppId` varchar(500) NOT NULL,
+  `Name` varchar(500) NOT NULL,
+  `OrgId` varchar(32) NOT NULL,
+  `OrgName` varchar(64) NOT NULL,
+  `OwnerName` varchar(500) NOT NULL,
+  `OwnerEmail` varchar(500) NOT NULL,
+  `IsDeleted` bigint(20) NOT NULL,
+  `DataChange_CreatedBy` varchar(32) DEFAULT NULL,
+  `DataChange_CreatedTime` date NOT NULL,
+  `DataChange_LastModifiedBy` varchar(32) DEFAULT NULL,
+  `DataChange_LastTime` date DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+
+CREATE TABLE `mapsdb` (
+  `REQUESTID` varchar(40) DEFAULT NULL,
+  `TRANSCODE` varchar(6) DEFAULT NULL,
+  `ACCNO` varchar(40) DEFAULT NULL,
+  `ACCNAME` varchar(120) DEFAULT NULL,
+  `ACCDEPT` varchar(30) DEFAULT NULL,
+  `ACCSTATUS` varchar(30) DEFAULT NULL,
+  `BALANCE` bigint(200) DEFAULT NULL,
+  `STARTDATE` varchar(8) DEFAULT NULL,
+  `ENDDATE` varchar(8) DEFAULT NULL,
+  `TRANSDATE` varchar(8) DEFAULT NULL,
+  `SUMMARY` varchar(30) DEFAULT NULL,
+  `TRANSNO` varchar(30) DEFAULT NULL,
+  `AMOUNT` bigint(200) DEFAULT NULL,
+  `VCHNO` varchar(30) DEFAULT NULL,
+  `DEBORCRE` varchar(30) DEFAULT NULL,
+  `CURRENCY` varchar(30) DEFAULT NULL,
+  `RECIPACCNO` varchar(30) DEFAULT NULL,
+  `RECIPACCNAME` varchar(30) DEFAULT NULL,
+  `RECIPACCDEPT` varchar(30) DEFAULT NULL,
+  `IDKEY` varchar(50) DEFAULT NULL,
+  `RESFILENAME` varchar(50) DEFAULT NULL,
+  `RESMSG` varchar(200) DEFAULT NULL,
+  `FLAG` bigint(200) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+
+CREATE TABLE `payment` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `serial` varchar(200) DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8
+
+
+
+
+

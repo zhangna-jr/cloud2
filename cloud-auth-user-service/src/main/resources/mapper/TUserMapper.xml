@@ -15,4 +15,14 @@
     <select id="selectById" parameterType="java.lang.String" resultMap="BASE_DATE">
             select * from t_user  where user_name=#{username}
     </select>
+
+    <select id="searchUser" parameterType="java.lang.String" resultMap="BASE_DATE">
+        select * from t_user  where user_name=#{username}
+    </select>
+
+    <insert id="create" parameterType="com.zn.cloud.entity.TUser">
+        insert into t_user values(
+        #{user.id},#{user.userName}, #{user.userPassword} ,#{user.fullname},#{user.mobile}
+        )
+    </insert>
 </mapper>

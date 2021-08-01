@@ -9,4 +9,6 @@ import org.apache.ibatis.annotations.Param;
 public interface TUserMapper {
 
     TUser searchUser(@Param("username")String username);
+
+    int create(@Param("user")TUser user);
 }

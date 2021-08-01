@@ -38,14 +38,17 @@ public class UserServiceDetail implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         TUser tUser = tUserMapper.searchUser(username);
         List<TPermission> tPermissions = tPermissionMapper.searchPermissions(tUser.getId());
-        List<String> codes = new ArrayList<>();
+        ArrayList<String> codes=new ArrayList<String>();
         for (int i = 0;i<tPermissions.size();i++) {
             codes.add(tPermissions.get(i).getCode());
         }
-        String[] objects = (String[]) codes.toArray();
+        String[] strings = new String[codes.size()];
+        if (codes.size()>0){
+            codes.toArray(strings);
+        }
         //User byUsername = userRepository.findByUsername(username);
         UserDetails userDetails = org.springframework.security.core.userdetails.User.withUsername(tUser.getUserName())
-                .password(tUser.getUserPassword()).authorities(objects).build();
+                .password(tUser.getUserPassword()).authorities(strings).build();
         //return byUsername;
         return userDetails;
     }

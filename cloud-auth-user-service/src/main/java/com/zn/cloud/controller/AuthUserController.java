@@ -56,4 +56,10 @@ public class AuthUserController {
     public String getFoo() {
         return "i'm foo, " + UUID.randomUUID().toString();
     }
+
+    @RequestMapping(value = "/foo1", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('p2')")
+    public String getFoo1() {
+        return "i'm fooOne, " + UUID.randomUUID().toString();
+    }
 }

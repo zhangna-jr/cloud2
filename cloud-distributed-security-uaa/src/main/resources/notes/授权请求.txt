@@ -1,0 +1,35 @@
+授权码模式:先获取授权码（code）,通过授权码获取令牌，此模式令牌不经过浏览器和移动端APP，而是直接从服务端去交换
+	获取code: http://localhost:53020/oauth/authorize?client_id=c1&response_type=code&scope=all&redirect_uri=http://www.baidu.com  ---》GET
+	获取令牌：http://localhost:53020/oauth/token   ---》POST ,入参如下：
+	{
+		"client_id":"c1",
+		"grant_type":"authorization_code",
+		"client_secret":"secret",
+		"code":"6uTkTq",
+		"redirect_uri":"http://www.baidu.com"
+	}
+	
+简单模式：直接获取令牌，通过url传递令牌
+	http://localhost:53020/oauth/authorize?client_id=c1&response_type=token&scope=all&redirect_uri=http://www.baidu.com  ---》GET
+	
+密码模式：
+	http://localhost:53020/oauth/token  ---》post,入参如下：不能用row中的json,需要用x-www-form-erlencoded
+	{
+		"client_id":"c1",
+		"grant_type":"password",
+		"client_secret":"secret",
+		"username":"zhangsan",
+		"password":"123"
+	}
+	
+客户端模式：
+	http://localhost:53020/oauth/token  ---》post，入参如下：不能用row中的json,需要用x-www-form-erlencoded
+	{
+		"client_id":"c1",
+		"grant_type":"[{"key":"grant_type","value":"client_credentials","description":"","type":"text","enabled":true}]",
+		"client_secret":"secret"
+	}
+	
+	
+	
+总结：授权码是四种模中最安全的一种模式

@@ -39,6 +39,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Bean
     public ResourceServerTokenServices tokenServices(){
+        //远程访问授权服务令牌
         RemoteTokenServices services = new RemoteTokenServices();
         services.setCheckTokenEndpointUrl("http://localhost:53020/oauth/check_token");  //授权服务的check_token,授权服务中令牌访问端点安全策略开放了check_token
         services.setClientId("c1");

@@ -1,0 +1,12 @@
+授权服务检测令牌：
+	url:http://localhost:53020/oauth/check_token    --->POST,入参为：不能用row中的json,需要用x-www-form-erlencoded
+	{
+	"token":"f917ce1d-d763-440f-8986-9e0183503b06"
+	}
+	
+	
+资源服务访问controller，Headers中需要加入参：
+	{
+	"Authorization":"Bearer f917ce1d-d763-440f-8986-9e0183503b06"
+	}
+	

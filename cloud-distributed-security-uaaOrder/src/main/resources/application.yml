@@ -10,7 +10,7 @@ server:
 
 spring:
   application:
-    name: uaa-service
+    name: uaaOrder-service
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource   #配置数据源的类型
     driver-class-name: com.mysql.jdbc.Driver

@@ -1,13 +1,11 @@
 server:
   port: 53020
-  tomcat:
-    remote_ip_header: x-forwarded-for
-    protocol_header: x-forwarded-proto
-  use-forward-headers: true
-  servlet:
-    context-path: /uaa
-
-
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://eureka7002.com:7002/eureka/,http://eureka7001.com:7001/eureka/
 spring:
   application:
     name: uaa-service
@@ -15,66 +13,43 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource   #配置数据源的类型
     driver-class-name: com.mysql.jdbc.Driver
     #driver-class-name: org.git.mm.mysql.Driver
-    #url: jdbc:mysql://192.168.103.015:3306/test_cloud?useUnicode=true&characterEncoding=utf-8&useSSL=false
     url: jdbc:mysql://localhost:3306/test_cloud?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
     password: 123456
-  main:
-    allow-bean-definition-overriding: true
-  http:
-    encoding:
-      enabled: true
-      charset: UTF-8
-      force: true
-  freemarker:
-    enable: true
-    suffix: .html
-    request-context-attribute: rc
-    content-type: text/html
-    charset: UTF-8
-  mvc:
-    throw-exception-if-no-handler-found: true
-  resources:
-    add-mappings: false
-
-
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: refresh,health,info,env
-
-
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 feign:
   hystrix:
-    enable: true
-  compression:
-    request:
-      enable: true
-      mime-types[0]: text/xml
-      mime-types[1]: application/xml
-      mime-types[2]: application/json
-      min-request-size: 2048
-    response:
-      enable: true
-
-
-eureka:
-  client:
-    registerWithEureka: true
-    fetchRegistry: true
-    serviceUrl:
-      defaultZone: http://eureka7002.com:7002/eureka/,http://eureka7001.com:7001/eureka/
-  instance:
-    instance-id: uaa53020
-    prefer-ip-address: true   #网页eureka访问路径，可现实Ip地址
+    enabled: true
 
 mybatis:
   mapperLocations: classpath:/mapper/*Mapper.xml
   #实体扫描，多个package用逗号或者分号分隔
-  type-aliases-package: com.zn.springCloud.entities
+  type-aliases-package: com.zn.cloud.entity
 
 
+ribbon:
+  eureka:
+    enabled: true
+    #指的是建立连接所用的时间，适用于网络状况正常的情况下，两端连接所用的时间
+  ReadTimeout: 6000
+  #指的是建立连接后从服务器读取到可用资源所用的时间
+  ConnectTimeout: 6000
 
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+
+
+logging:
+  level:
+    com:
+      zn:
+        cloud: debug
 

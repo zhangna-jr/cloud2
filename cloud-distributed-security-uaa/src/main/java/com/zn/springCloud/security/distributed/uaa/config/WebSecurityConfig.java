@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
-    //4、配置认证管理器
+    //配置认证管理器
     @Bean
     public AuthenticationManager authenticationManager() throws Exception{
         return super.authenticationManager();

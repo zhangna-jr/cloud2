@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 
 @Configuration
 @EnableResourceServer  //此注解表明此配置类为资源服务配置类
@@ -19,12 +20,13 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     public static final String RESOURCE_ID = "res1";  //资源ID，与授权服务中客户端详情服务配置中的资源服务相对应
 
     @Autowired
-    private ResourceServerTokenServices tokenServices;
+    private TokenStore tokenStore;
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
         resources.resourceId(RESOURCE_ID)  //资源ID
-                .tokenServices(tokenServices())  // 验证令牌的服务
+                //.tokenServices(tokenServices())  // 验证令牌的服务
+                .tokenStore(tokenStore)
                 .stateless(true);
 
     }
@@ -32,11 +34,12 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/**").access("#oauth2.hasScope('all')")   //所有访问的scope都有all,授权服务配置中客户端详情配置中scope必须为all
+                .antMatchers("/**").access("#oauth2.hasScope('ROLE_ADMIN')")   //所有访问的scope都有all,授权服务配置中客户端详情配置中scope必须为all
                 .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);   //不用记录session
     }
 
+    //TokenConfig类中当使用jwt存储策略时，此bean不会被使用
     @Bean
     public ResourceServerTokenServices tokenServices(){
         //远程访问授权服务令牌

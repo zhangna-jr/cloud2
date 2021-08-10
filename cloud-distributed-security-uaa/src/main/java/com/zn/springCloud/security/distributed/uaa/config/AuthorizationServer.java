@@ -1,22 +1,31 @@
 package com.zn.springCloud.security.distributed.uaa.config;
 
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.InMemoryAuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+
+import javax.sql.DataSource;
+import java.util.Arrays;
 
 
 /*
@@ -46,11 +55,17 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private JwtAccessTokenConverter jwtAccessTokenConverter;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     //1、配置客户端详情信息服务
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         //暂时使用内存方式
-        clients.inMemory()
+        /*clients.inMemory()
                 .withClient("c1")  //client_id：客户端id
                 .secret(new BCryptPasswordEncoder().encode("secret"))  //客户端密钥
                 .resourceIds("res1")  //客户端可以访问的资源列表
@@ -58,9 +73,26 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
                 .authorizedGrantTypes("authorization_code","password","client_credentials","implicit","refresh_token")  //该client允许的授权类型
                 .scopes("all")  //允许的授权范围
                 .autoApprove(false)  //false 跳转到授权页面
-                .redirectUris("http://www.baidu.com");
+                .redirectUris("http://www.baidu.com");*/
+
+        //将客户端信息存储到数据库，需要提前配置注入ClientDetailsService
+        clients.withClientDetails(clientDetailsService);
+
     }
 
+    /**
+     * description:当配置客户端详情信息存储到数据库时，需要配置该bean
+     * @param:
+     * @return:
+     * @author: zhangna
+     * @date: 2021/8/10
+     */
+    @Bean
+    public ClientDetailsService clientDetailsService(DataSource dataSource){
+        ClientDetailsService clientDetailsService = new JdbcClientDetailsService(dataSource);
+        ((JdbcClientDetailsService) clientDetailsService).setPasswordEncoder(passwordEncoder);
+        return clientDetailsService;
+    }
 
     //2.1、令牌管理服务
     @Bean
@@ -69,16 +101,33 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
         services.setClientDetailsService(clientDetailsService);  //客户端信息服务
         services.setSupportRefreshToken(true);  //是否产生刷新令牌
         services.setTokenStore(tokenStore);   //令牌存储策略
+        //设置令牌增强(配置jwt存储策略时需配置)
+        TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+        tokenEnhancerChain.setTokenEnhancers(Arrays.asList(jwtAccessTokenConverter));
+        services.setTokenEnhancer(tokenEnhancerChain);
+
         services.setAccessTokenValiditySeconds(7200);   //令牌默认有效期
         services.setRefreshTokenValiditySeconds(259200);  //刷新令牌默认有效期3天
         return services;
     }
 
-    //设置授权码模式授权码如何存取，暂  时采用内存方式,上面通过@Autowired注入
-    @Bean
+    //设置授权码模式授权码如何存取，暂时采用内存方式,上面通过@Autowired注入
+    /*@Bean
     public AuthorizationCodeServices authorizationCodeServices(){
         return new InMemoryAuthorizationCodeServices();
+    }*/
+
+    //设置授权码模式授权码如何存取,将授权码存储在数据库
+    @Bean
+    public AuthorizationCodeServices authorizationCodeServices(DataSource dataSource){
+        return new JdbcAuthorizationCodeServices(dataSource);
     }
+
+
+
+
+
+
     /**
      * @Description:  令牌的是授权类型
      * 1、authenticationManager是认证管理器，当选择密码授权类型时需要注入AuthenticationManager对象

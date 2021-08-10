@@ -104,7 +104,38 @@ CREATE TABLE `payment` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8
 
+CREATE TABLE `oauth_client_details` (
+  `client_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '客户端标识',
+  `resource_ids` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '接入资源列表',
+  `client_secret` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '客户端密钥',
+  `scope` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `authorized_grant_types` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `web_server_redirect_uri` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `authorities` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `access_token_validity` int(11) NULL DEFAULT NULL,
+  `refresh_token_validity` int(11) NULL DEFAULT NULL,
+  `additional_information` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL ,
+  `create_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
+  `archived` tinyint(4) NULL DEFAULT NULL,
+  `trusted` tinyint(4) NULL DEFAULT NULL,
+  `autoapprove` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`client_id`) USING BTREE
+) ENGINE=InnoDB CHARACTER SET = utf8 COLLATE utf8_general_ci COMMENT = '接入客户端信息' ROW_FORMAT = Dynamic;
 
+insert into oauth_client_details values('c1','res1','$2a$10$PfrQgyydtsWV4jTbgDlzaefo7/kSkCU3Q21AottlrNRnEMUh/TidK','ROLE_ADMIN,ROLE_USER,ROLE_API',
+'client_credentials,password,authorization_code,implicit,refresh_tokrn','http://www.baidu.com'  ,null,7200,259200,null,'2019-09-09 16:04:28',0,0,'false');
+
+insert into oauth_client_details values('c2','res2','$2a$10$PfrQgyydtsWV4jTbgDlzaefo7/kSkCU3Q21AottlrNRnEMUh/TidK','ROLE_API',
+'client_credentials,password,authorization_code,implicit,refresh_tokrn','http://www.baidu.com'  ,null,31536000,259200,null,'2019-09-09 21:04:28',0,0,'false');
+
+
+CREATE TABLE `oauth_code` (
+  `create_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
+  `code` varchar(255) DEFAULT '',
+  `authentication` varchar(255) DEFAULT '',
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8
+
+insert into oauth_code values('2019-09-09 21:04:28','GzCF3g','(Binary/Image)');
 
 
 

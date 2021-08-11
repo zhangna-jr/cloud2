@@ -10,7 +10,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @Configuration
 public class TokenConfig {
 
-    private String SIGNING_KEY = "uaa123"; //对称密钥
+    private String SIGNING_KEY = "uaa123"; //对称密钥，此密钥应与授权服务的对称密钥保持一致
     /*
      * description:令牌存储策略
      * @param:

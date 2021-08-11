@@ -1,6 +1,9 @@
 package com.zn.cloud.service.Impl;
 
 
+import com.alibaba.druid.support.json.JSONParser;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.zn.cloud.entity.TPermission;
 import com.zn.cloud.entity.TUser;
 import com.zn.cloud.mapper.TPermissionMapper;
@@ -47,6 +50,7 @@ public class UserServiceDetail implements UserDetailsService {
         if (codes.size()>0){
             codes.toArray(strings);
         }
+        //String s = JSON.toJSONString(tUser);
         //User byUsername = userRepository.findByUsername(username);
         UserDetails userDetails = org.springframework.security.core.userdetails.User.withUsername(tUser.getUserName())
                 .password(tUser.getUserPassword()).authorities(strings).build();

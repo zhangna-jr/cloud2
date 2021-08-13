@@ -11,7 +11,8 @@ eureka:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://eureka7002.com:7002/eureka/,http://eureka7001.com:7001/eureka/
+      #defaultZone: http://eureka7002.com:7002/eureka/,http://eureka7001.com:7001/eureka/
+      defaultZone: http://localhost:7002/eureka/,http://localhost:7001/eureka/
   instance:
     instance-id: order80    #网页查询eureka注册信息时，Instances下status名称
     prefer-ip-address: true   #网页查询eureka注册信息中某服务的访问路径时，左下角可显示Ip地址

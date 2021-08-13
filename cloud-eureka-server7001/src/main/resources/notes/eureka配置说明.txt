@@ -1,0 +1,4 @@
+1、若需要配置eureka集群,则C:\Windows\System32\drivers\etc路径下host文件需要配置下面内容，否则集群不成功
+####SpringCloud2020#####
+	127.0.0.1       eureka7001.com
+	127.0.0.1       eureka7002.com

@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 public class RestTemplateConfiguration {
 
     @Bean
-    //@LoadBalanced
+    //@LoadBalanced   //此处注释掉负载均衡是因为ConsumerController中getLB()自写了负载均衡
     public RestTemplate restTemplate(){
         return new RestTemplate();
     }

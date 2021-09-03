@@ -1,0 +1,31 @@
+
+一、redis配置
+1、GENERAL（通用）
+	daemonize:是否以守护线程方式开启redis,默认为no。当设置为yes时，redis会在后台运行，此时redis会一直启动除非kill该进程，当为no时，exit强制退出或者关闭连接工具会导致redis进程退出。
+	pidfile   XXX：当daemonize设置为yes时，进程pid号写入至redis.conf选项pidfile设置的文件中。
+	bind 127.0.0.1：redis当前用的是单机版，此设置即绑定本机。
+	timeout 0：此设置为0时表示不关闭，当为N时，表示此redis进程N秒未进行数据读写操作，则关闭redis。
+	tcp-keepalive 300：当redis为集群时，设置彼此保持心跳的时间。即每300s发送一次心跳确定对方是否存活。
+	loglevel notice：日志级别，总共有四类：debug（适合开发，测试阶段），verbose，notice，warning，从左到右日志级别越来越高，打出的日志越来越少。生产上可以选择notice/warning。
+	logfile ""：日志名称
+	syslog-enabled no：是否将日志输出到系统日志里，默认为关（no）。
+	syslog-ident redis：当系统日志为yes时，以redis开头打印日志。
+	syslog-facility local0：指定系统日志设备，值可以是USER或者LOCAL0-LOCAL7,默认是LOCAL0。
+	databases 16：redis是分布式数据库，默认有16个库。
+2、SECURITY
+	requirepass 123456：为redis设置密码，默认情况下redis没有密码，当通过此处设置密码后可通过AUTH 123456连接redis。
+3、LIMITS
+	maxclients 10000：redis最大连接客户端数
+	maxmemory-policy noeviction：内存移除策略，默认是noeviction（永不移除），此配置分为volatile-lru（使用LRU算法移除key,只针对设置了过期时间的键），allkeys-lru（使用LRU算法移除key）,
+				volatile-random(在过期集合中移除随机的key，只对设置了过期时间的键)，allkeys-random（移除随机的key）。LRU:最近最少使用。
+二、事务
+1、redis支持部分事务
+	MULTI:开启事务命令，EXEC:执行事务，DISCARD：取消事务，放弃本次操作，WATCH key[key...]:监视一个或者多个key,如果事务执行之前这个（或这些）key被其他命令改动，那么事务将被打断。
+	UNWATCH:取消WATCH命令对所有事务的监控。
+2、为什么redis部分支持事务：
+	MULTI开启事务之后，执行所有操作都会被记入队列，当执行EXEC时，进行批量统一处理。---》正常执行
+	MULTI开启事务之后，执行的某条操作命令编译错误（eg:getset k2）,则本次事务将回滚。---》全体连坐
+	MULTI开启事务之后，执行的某条操作命令运行错误（eg:incr k1）,其实k1的值为aa,故运行时会报错，则本次事务只有运行错误的该条操作失败，其他的成功。---》冤头债主
+	从全体连坐和冤头债主可看出redis支持部分事务。
+	
+	

@@ -1,4 +1,3 @@
-
 一、redis配置
 1、GENERAL（通用）
 	daemonize:是否以守护线程方式开启redis,默认为no。当设置为yes时，redis会在后台运行，此时redis会一直启动除非kill该进程，当为no时，exit强制退出或者关闭连接工具会导致redis进程退出。
@@ -27,5 +26,65 @@
 	MULTI开启事务之后，执行的某条操作命令编译错误（eg:getset k2）,则本次事务将回滚。---》全体连坐
 	MULTI开启事务之后，执行的某条操作命令运行错误（eg:incr k1）,其实k1的值为aa,故运行时会报错，则本次事务只有运行错误的该条操作失败，其他的成功。---》冤头债主
 	从全体连坐和冤头债主可看出redis支持部分事务。
+三、持久化
+1、RDB
+       在指定的时间内将内存中的数据集写入磁盘。也就是行话中的Snapshot快照，恢复时是将快照文件写入内存。
+       redis会Fork一个子进程进行持久化，会将数据写入临时文件中，待持久化结束了会将临时文件替换上次持久化好的文件。整个过程主进程不进行IO操作，保证了redis的高性能。
+       如果进行大规模数据恢复且对数据的完整性不敏感，可用RDB。
+       RDB保存的是dump.rdb文件
+       RDB触发持久化要求（默认）：1min更新10000次数据/5min更新10次数据/15分钟更新1次数据
+       优势：适合大规模数据恢复   劣势：可能会造成最后一次数据丢失、Fork时，内存中的数据扩大了一倍，会消耗性能。
+2、AOF
+        将redis执行过程中所有写指令记录进"appendonly.aof"文件中，redis启动时读取该文件构建数据。
+        默认不开启（appendonly no）
+        当rdb与aof同时存在时，默认读取aof文件
+        当aof文件被破坏时，在redis-check-aof所在目录下执行命令：redis-check-aof --fix appendonly.aof
+        配置文件中appendfsync everysec：默认，每修改同步，异步操作，每秒记录，如果一秒内宕机，有数据丢失。
+		              always：每秒同步，同步持久化，每次发生数据变更会被立即记录进磁盘，性能较差但数据完整性比较好。
+		              no:从不同步。
+        重写：aof采用文件追加方式，文件会越来越大，为避免此情况新增了重写机制，当aof文件大小超过所设定的阈值，redis会启动AOF文件的内容压缩，只保留可以恢复数据的最小指令集，可以使用命令bgrewriteaof。
+        重写原理：AOF文件持续增大时，会fork一个新进程进行重写操作，遍历新进程内存中的数据，每条数据有set语句，重写进新的aof文件。
+        重写触发机制，redis会记录上次重写aof时的aof文件大小，默认配置是当AOF文件大小是上次rewrite后大小的一倍（auto-aof-rewrite-percentage 100）且文件大小大于64M（auto-aof-rewrite-min-size 64mb）时触发。
+        优势：默认的同步方式若一秒内宕机，最多丢失一秒内数据。
+        劣势：aof文件远大于rdb文件，恢复速度慢
+四、主从复制
+master:主机；slaver:从机    ----->master以写为主，slaver以读为主
+	作用：读写分离，容灾恢复
+	配置：配从不配主，从机redis启动之后执行命令：slaveof  主库IP  主库端口     ------>每次与master断开之后都需要重新连接，除非配置进redis.conf文件
+	          可分为一主二从（每台从机都连接主机）、薪火相传-->6379(主机，从机为6380)，6380是6379的从机，又是6381的主机），6381（6380的从机）
+	          当6379宕机，6380执行命令：slaveof no one ,就可从从机切换为主机，6381执行命令：slaveof 127.0.0.1 6380,就可变成6380的从机
+	复制原理：从机启动redis之后，执行slaveof 主机IP 主机端口之后，第一次为全量复制，即执行完slaveof命令将主机中的数据全部复制过来，之后都是增量复制
+	读写数据：从机配置之后，不能执行写操作 
+	哨兵模式：（1）、在redis.conf同级目录下创建文件sentinel.conf文件，并写入“sentinel  monitor host6379 127.0.0.1 6379  1”   --->host6379指被监控数据库的名字（自己起名字），127.0.0.1指主机IP,6379指主机端口，1代表从机票数多余1票就可被选为主机。
+		（2）、执行命令redis-sentinel /mybaties/sentinel.conf命令。
+		总结：启动哨兵模式之后，若主机宕机，哨兵模式监控从机谁的票数多将会选定为新的主机，其他从机变为新主机的从机，宕机后的主机若恢复运行，将会变成新主机的从机。
+五、常用命令
+1、开启redis
+[root@localhost myredis]# redis-server redis.conf
+[root@localhost myredis]# redis-cli -p 6379
+2、关闭redis
+127.0.0.1:6379> shutdown save
+2、登记值
+127.0.0.1:6379> set k1 hello
+3、获取值
+127.0.0.1:6379> get k1
+4、redis里默认有16个库（分布式数据库），角标从0-15，默认使用1号库（角标为0），转换其他库命令如下，角标1表示2号库
+127.0.0.1:6379[1]> select 1
+5、查询所有key数量
+127.0.0.1:6379> DBSIZE
+6、查询所有key
+127.0.0.1:6379> keys *
+7、redis五大数据类型：String,Hash(类似java里面的map),List（底层是链表，LinkList）,Set,Zset(sorted set:有序集合)
+8、redis常见数据类型操作命令
+      http://redisdoc.com/
+9、redis(哈希)
+      hset key0 key1 value1 ---->redis缓存中放入key为key0,value为（key1 value1）的哈希值
+      127.0.0.1:6379> hset custom id 1 name z3 age 18
+       hget key0 key1  ----->查询key为key0的hashmap中key为key1的值
+       hmset  key0 key1 value1 key2 value2 key3 value3   ---->缓存中放入key为key0,value为(key1,value1),(key2,value2),(key3,value3)的哈希值
+       hmget key0 key1 key2 key3    ---->查询key为key0的hashmap中key为key1,key2,key3的值
+       hgetall key0   --->查询key为key0的hashmap中的数据
+       hkeys key0    ---->查询key为key0的hashmap中的所有key
+       hvals key0    ---->查询key为key0的hashmap中的所有value
 	
 	
